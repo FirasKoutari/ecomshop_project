@@ -1,9 +1,11 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
   <title>CodePen - Neumorphism Login Form</title>
-  <link rel="stylesheet" href="css/logstyle.css">
+  <link rel="stylesheet" href="{% static 'css/logstyle.css' %}">
 
 </head>
 <body>
@@ -13,7 +15,9 @@
   <head>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="main.css"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+
   </head>
   <body>
     <div class="main">
@@ -55,7 +59,7 @@
   </body>
 </html>
 <!-- partial -->
-  <script  src="js/logscript.js"></script>
+  <script  src="{% static "js/logscript.js" %}"></script>
 
 </body>
 </html>
