@@ -6,6 +6,7 @@ class User(models.Model):
     email_address = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     password = models.CharField(max_length=255)
+    
 
 class UserReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
