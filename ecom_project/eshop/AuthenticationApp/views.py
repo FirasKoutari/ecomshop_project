@@ -1,12 +1,28 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User , auth
 from django.contrib import messages
 
+
 # Create your views here.
 
-def login(request):
-    return render(request,'login.html')
+def custom_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Log the user in
+            login(request, user)
+            return redirect('index')  # Replace 'home' with the name of your home URL pattern
+        else:
+            return render(request, 'login.html', {'error_message': 'Invalid login credentials'})
+
+    return render(request, 'login.html')
 
 def register(request):
     if request.method == 'POST':
@@ -38,4 +54,4 @@ def register(request):
 
             
 
-    return render(request, "logi.html")
+    return render(request, "login.html")
