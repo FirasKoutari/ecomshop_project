@@ -14,7 +14,9 @@ def shop(request):
 
 
 class ProductDetailView(View):
-    template_name = 'details.html'
+    template_name = 'detail.html'
+    model = Product
+    context_object_name = 'product'
 
     def get(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
