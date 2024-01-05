@@ -7,18 +7,19 @@ from django.contrib import messages
 
 # Create your views here.
 
-def custom_login(request):
+def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         # Authenticate user
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is not None:
-            # Log the user in
-            login(request, user)
-            return redirect('index')  # Replace 'home' with the name of your home URL pattern
+            # hna kontdayer login(request, user)
+
+            auth.login(request, user)
+            return redirect('/')  
         else:
             return render(request, 'login.html', {'error_message': 'Invalid login credentials'})
 
@@ -55,3 +56,7 @@ def register(request):
             
 
     return render(request, "login.html")
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
