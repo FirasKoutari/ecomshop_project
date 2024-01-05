@@ -21,6 +21,9 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     product_image = models.ImageField(upload_to='product_images/')
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    qty_in_stock = models.IntegerField()
+
 
 class Variation(models.Model):
     category = models.ForeignKey('ProductCategory', on_delete=models.CASCADE)
