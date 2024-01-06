@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .models import Product
+from ProductsApp.models import ProductConfiguration,ProductItem,ProductCategory,Variation,VariationOption,Product,Promotion,PromotionCategory
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from .models import Product
+
 # Create your views here.
 def detail(request):
     return render(request,'detail.html')
