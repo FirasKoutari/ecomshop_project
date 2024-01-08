@@ -1,6 +1,6 @@
 from django.db import models
 from AuthenticationApp.models import User
-from ProductsApp.models import ProductItem
+# from ProductsApp.models import ProductItem
 
 # Create your models here.
 
@@ -44,11 +44,11 @@ class ShopOrder(models.Model):
     order_total = models.DecimalField(max_digits=10, decimal_places=2)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
 
-class OrderLine(models.Model):
-    product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
-    order = models.ForeignKey(ShopOrder, on_delete=models.CASCADE)
-    qty = models.IntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+# class OrderLine(models.Model):
+#     product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
+#     order = models.ForeignKey(ShopOrder, on_delete=models.CASCADE)
+#     qty = models.IntegerField()
+#     price = models.DecimalField(max_digits=10, decimal_places=2)
 
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,8 +1,8 @@
-from ProductsApp.models import ProductConfiguration,ProductItem,ProductCategory,Variation,VariationOption,Product,Promotion,PromotionCategory
+from ProductsApp.models import Product
 from django.shortcuts import render, get_object_or_404,redirect
 from django.views import View
 from .models import Product
-from CartApp.models import ShoppingCart, ShoppingCartItem
+from CartApp.models import ShoppingCart
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
