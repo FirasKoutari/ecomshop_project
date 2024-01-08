@@ -42,7 +42,7 @@ def remove_from_cart(request, item_id):
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'product_list.html', {'products': products})
+    return render(request, 'shop.html', {'products': products})
 
 # @login_required
 # def add_to_cart(request, product_item_id):
