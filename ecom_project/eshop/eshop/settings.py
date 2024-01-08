@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+app_name = 'cart'
 # Application definition
 
 INSTALLED_APPS = [

@@ -46,7 +46,9 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu rounded-0 m-0">
-                                <a  href="{% url "cart" %}" class="dropdown-item">Shopping Cart</a>
+                                {% comment %} <a  href="{% url "cart" %}" class="dropdown-item">Shopping Cart</a> {% endcomment %}
+                                <a href="{% url 'CartApp:view_cart' %}" class="dropdown-item">Shopping Cart</a>
+
                                 <a  href="{% url "checkout" %}" class="dropdown-item">Checkout</a>
                             </div>
                         </div>
