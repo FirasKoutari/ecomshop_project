@@ -52,10 +52,20 @@
                         </div>
                         <a href="{% url "contact" %} " class="nav-item nav-link active">Contact</a>
                     </div>
+
+
                     <div class="navbar-nav ml-auto py-0">
-                        <a href="login" class="nav-item nav-link">Login</a>
-                        <a href="login" class="nav-item nav-link">Register</a>
+                        {% if user.is_authenticated %}
+                        
+                        <li class="nav-item nav-link"> Bonjour , {{user.username}}!!</li>  <a href="AuthenticationApp/logout" class="nav-item nav-link">Logout</a>
+                       {%else%}
+                            <a href="{% url "login"%}" class="nav-item nav-link">Login / Register</a>
+                       {% endif %}
+
                     </div>
+
+
+
                 </div>
             </nav>  
         </div>
