@@ -210,7 +210,7 @@
                             <th>Remove</th>
                         </tr>
                     </thead>
-                    <tbody class="align-middle">
+                     {% comment %} <tbody class="align-middle">
                         {% for cart_item in cart_items %}
                             <tr>
                                 <td class="align-middle">
@@ -241,36 +241,46 @@
                                 </td>
                             </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    </tbody> {% endcomment %}
 
 
-                <body>
- 
-                    <h1>Your Shopping Cart</h1>
-                 
-                    <div class="product-list">
-                 
+
+
                     
-                 
-                    {% for item in cart_items %}
-                    <div class="product-item">
-                        <p>{{ item.product.name }} ({{ item.quantity }})</p>
-                        <p>Price: ${{ item.product.price }}</p>
-                        <a href="{% url 'CartApp:remove_from_cart' item.id %}">Remove</a>
+                </table>
+                
+                <body>
+                    <div class="container mt-5">
+                        <h1 class="mb-4">Your Shopping Cart</h1>
+                
+                        <div class="product-list">
+                            {% for item in cart_items %}
+                                <div class="product-item mb-3 p-3 border">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; margin-right: 10px;">
+                                        <div>
+                                            <h5>{{ item.product.name }} ({{ item.quantity }})</h5>
+                                            <p>Price: ${{ item.product.price }}</p>
+                                            <a href="{% url 'CartApp:remove_from_cart' item_id=item.id %}" class="btn btn-danger btn-sm">Remove from Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p>Your cart is empty.</p>
+                            {% endfor %}
+                        </div>
+                
+                        <div class="total-price mt-4">
+                            <p>Total Price: ${{ total_price }}</p>
+                        </div>
+                
+                        <a href="{% url 'CartApp:product_list' %}" class="btn btn-primary mt-3">Continue Shopping</a>
                     </div>
-                    {% empty %}
-                    <p>Your cart is empty.</p>
-                    {% endfor %}
-                 
-                    </div>
-                 
-                    <p>Total Price: ${{ total_price }}</p>
-                 
-                    <a href="{% url 'CartApp:product_list' %}">Continue Shopping</a>
-                 
                 </body>
+                
 
+
+                
 
             </div>
             <div class="col-lg-4">

@@ -33,12 +33,16 @@ def add_to_cart(request, product_id):
                                                        user=request.user)
     cart_item.quantity += 1
     cart_item.save()
-    return redirect('cart:view_cart')
- 
+    return redirect('CartApp:view_cart') 
 def remove_from_cart(request, item_id):
     cart_item = CartItem.objects.get(id=item_id)
     cart_item.delete()
-    return redirect('cart:view_cart')
+    return redirect('CartApp:view_cart')
+
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'product_list.html', {'products': products})
 
 # @login_required
 # def add_to_cart(request, product_item_id):

@@ -27,14 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-app_name = 'cart'
+# app_name = 'cart'
 # Application definition
 
 INSTALLED_APPS = [
     'AuthenticationApp.apps.AuthenticationappConfig',
     'MainApp.apps.MainappConfig',
     'PaymentApp.apps.PaymentappConfig',
-    'CartApp.apps.CartappConfig',
+    # 'CartApp.apps.CartappConfig',
     'ProductsApp.apps.ProductsappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'CartApp',
     
 ]
 
