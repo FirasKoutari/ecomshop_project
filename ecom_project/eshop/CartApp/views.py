@@ -4,6 +4,9 @@ from django.db import models
 from ProductsApp.models import Product
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
+from django.http import HttpResponse
+from django.template import loader
+from django.db.models import Sum
 
 # Create your views here.
 def cart(request):
@@ -28,53 +31,13 @@ def view_cart(request):
     total_price = sum(item.product.price * item.quantity for item in cart_items)
     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
  
-# def add_to_cart(request, product_id):
-#     product = Product.objects.get(id=product_id)
-#     cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
-#     cart_item.quantity += 1
-#     cart_item.save()
-#     return redirect('CartApp:view_cart') 
 
 
 
-# def add_to_cart(request, product_id):
-#     product = get_object_or_404(Product, id=product_id)
-
-#     # Check if there is enough quantity available
-#     if product.qty <= 0:
-#         messages.error(request, f"Sorry, {product.name} is out of stock.")
-#         return redirect('CartApp:view_cart')
-
-#     cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
-
-#     if not created:
-#         # If the item already exists in the cart, check if there's enough quantity available
-#         if cart_item.quantity < product.qty:
-#             cart_item.quantity += 1
-#             cart_item.save()
-#             product.qty -= 1  # Decrease available quantity
-#             product.save()
-#             messages.success(request, f"Quantity of {product.name} increased to {cart_item.quantity}.")
-#         else:
-#             messages.warning(request, f"Cannot add more {product.name} to the cart. Limited stock available.")
-#     else:
-#         # If the item is not in the cart, set the quantity to 1
-#         cart_item.quantity = 1
-#         cart_item.save()
-#         product.qty -= 1  # Decrease available quantity
-#         product.save()
-#         messages.success(request, f"{product.name} added to the cart.")
-
-#     return redirect('CartApp:view_cart')
-
-
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
 
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
-    # Check if there is enough quantity available
     if product.qty <= 0:
         messages.error(request, f"Sorry, {product.name} is out of stock.")
         return redirect(request.META.get('HTTP_REFERER', 'CartApp:view_cart'))
@@ -82,11 +45,10 @@ def add_to_cart(request, product_id):
     cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
 
     if not created:
-        # If the item already exists in the cart, check if there's enough quantity available
         if cart_item.quantity < product.qty:
             cart_item.quantity += 1
             cart_item.save()
-            product.qty -= 1  # Decrease available quantity
+            product.qty -= 1  
             product.save()
             messages.success(request, f"Quantity of {product.name} increased to {cart_item.quantity}.")
             return redirect('CartApp:view_cart')
@@ -94,10 +56,9 @@ def add_to_cart(request, product_id):
         else:
             messages.warning(request, f"Cannot add more {product.name} to the cart. Limited stock available.")
     else:
-        # If the item is not in the cart, set the quantity to 1
         cart_item.quantity = 1
         cart_item.save()
-        product.qty -= 1  # Decrease available quantity
+        product.qty -= 1  
         product.save()
         messages.success(request, f"{product.name} added to the cart.")
 
@@ -115,4 +76,10 @@ def remove_from_cart(request, item_id):
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'shop.html', {'products': products})
+
+# Had lfonction dyali l'image li fl topbar
+
+def cart_total_quantity(request):
+    total_quantity = CartItem.objects.filter(user=request.user).aggregate(Sum('quantity'))['quantity__sum'] or 0
+    return {'total_quantity': total_quantity}
 
