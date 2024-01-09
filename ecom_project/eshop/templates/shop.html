@@ -16,7 +16,29 @@
         </div>
     </div>
     <!-- Page Header End -->
+{% comment %} Ce style est pour la verification du stock design {% endcomment %}
+<style>
+    /* Styles for the overlay */
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
 
+    /* Styles for the popup */
+    .popup {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
 
     <!-- Shop Start -->
     <div class="container-fluid pt-5">
@@ -168,6 +190,16 @@
                             </div>
                         </div>
                     </div>
+
+                    {% comment %} HNA ERREUR {% endcomment %}
+
+                    {% comment %} <div id="messages-container">
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    </div> {% endcomment %}
+  
+                      
                     {% for pr in prod %}
                     <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                         
@@ -191,30 +223,19 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 
+                                
                                 <a href="{% url 'product_detail' pr.id %}" class="btn btn-sm text-dark p-0">
                                     <i class="fas fa-eye text-primary mr-1"></i>View Detail
                                 </a>
                                 <!-- Affichez les détails du produit -->
                             
                                 <!-- Utilisez le lien avec l'ID du produit actuel -->
-                                           <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
+                                           <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart </a>
                                 {% comment %} <a href="{% url 'CartApp:add_to_cart' product_id=1 %}" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
 
                                 {% comment %} <a href="{% url 'cart:add_to_cart' product.id %}"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
                                 
-    <!-- Votre code pour afficher chaque produit -->
 
-    {% comment %} {% for pr in prod %}
-    <!-- Votre code pour afficher chaque produit -->
-
-    {% if pr.product_exists %}
-        <a href="{% url 'add_to_cart_view' pk=pr.id %}" class="btn btn-sm text-dark p-0">
-            <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
-        </a>
-    {% else %}
-        <p>Product not found</p>
-    {% endif %}
-{% endfor %} {% endcomment %}
 
 
 
@@ -253,8 +274,29 @@
     </div>
     <!-- Shop End -->
 
+    {% comment %} Ici qty verificationn {% endcomment %}
+    <div class="overlay" id="overlay">
+        <div class="popup" id="popup">
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
     <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <script>
+        // Get the overlay and popup elements
+        var overlay = document.getElementById('overlay');
+        var popup = document.getElementById('popup');
+    
+        if (popup.innerHTML.trim() !== '') {
+            overlay.style.display = 'flex';
+    
+            overlay.addEventListener('click', function() {
+                overlay.style.display = 'none';
+            });
+        }
+    </script>
+
 
 </body>
 {% endblock content%}
