@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.template import loader
 from django.db.models import Sum
+from django.contrib.auth.models import AnonymousUser
 
 # Create your views here.
 def cart(request):
@@ -79,7 +80,7 @@ def product_list(request):
 
 # Had lfonction dyali l'image li fl topbar
 
-def cart_total_quantity(request):
-    total_quantity = CartItem.objects.filter(user=request.user).aggregate(Sum('quantity'))['quantity__sum'] or 0
-    return {'total_quantity': total_quantity}
+# def cart_total_quantity(request):
+#     total_quantity = CartItem.objects.filter(user=request.user).aggregate(Sum('quantity'))['quantity__sum'] or 0
+#     return {'total_quantity': total_quantity}
 

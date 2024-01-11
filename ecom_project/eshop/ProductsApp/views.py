@@ -1,5 +1,5 @@
-from ProductsApp.models import Product
-from django.shortcuts import render, get_object_or_404,redirect
+from ProductsApp.models import Product,ProductCategory
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from .models import Product
 from CartApp.models import ShoppingCart
@@ -141,9 +141,6 @@ class ProductDetailView(View):
 
 
 
-
-
-
 def add_to_cart_view(request, pk):
     try:
         product_item = get_object_or_404(ProductItem, pk=pk)
@@ -177,3 +174,12 @@ def add_to_cart_view(request, pk):
     return HttpResponse(status=200)
 
 
+def category_product_list_view(request, cid):
+    category = get_object_or_404(ProductCategory, id=cid)
+    products= Product.objects.filter(category=category)
+
+    context = {
+        "category":category,
+        "products":products,
+    }
+    return render(request,"category.html", context)
