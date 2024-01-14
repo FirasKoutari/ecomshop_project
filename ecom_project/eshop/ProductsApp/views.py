@@ -1,15 +1,12 @@
 from ProductsApp.models import Product,ProductCategory
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from .models import Product
+from .models import Product ,Review
 from CartApp.models import ShoppingCart
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from django.contrib import messages
 from CartApp.models import ShoppingCart
-from django.db.models import Exists, OuterRef
-from django.db.models import Subquery
+
 
 
 # Create your views here.
@@ -33,111 +30,64 @@ class ProductDetailView(View):
 
     def get(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
-        context = {'product': product}
+        reviews = Review.objects.filter(product=product)  # Récupérez les commentaires associés au produit
+        context = {'product': product, 'reviews': reviews}  # Ajoutez les commentaires au contexte
         return render(request, self.template_name, context)
-    
 
 
-
-
-
-# @method_decorator(login_required, name='dispatch')
-# class AddToCartView(View):
-#     # ... (autres parties de la classe)
+# class ProductDetailView(View):
+#     template_name = 'detail.html'
+#     model = Product
+#     context_object_name = 'product'
 
 #     def get(self, request, pk):
-#         # Vérifier si l'utilisateur est connecté
-#         if not request.user.is_authenticated:
-#             return redirect('login')  # Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+#      product = get_object_or_404(Product, pk=pk)
+#      reviews = product.reviews.all()
+#      print(reviews)  # Ajoutez cette ligne pour imprimer les commentaires dans la console
+#      context = {'product': product, 'reviews': reviews}
+#      return render(request, self.template_name, context)
+    
 
+# class ProductDetailView(View):
+#     template_name = 'detail.html'
+#     model = Product
+#     context_object_name = 'product'
+
+#     def get(self, request, pk):
 #         product = get_object_or_404(Product, pk=pk)
+#         context = {'product': product}
+#         return render(request, self.template_name, context)
+    
+    # views.py
+# views.py
+# ProductsApp/views.py
+# views.py
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product
+from .forms import ReviewForm
 
-#         # Vérifier si l'utilisateur a un panier existant, sinon le créer
-#         print(type(request.user))
-#         cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-#         print(f"Cart ID: {cart.id}, User: {cart.user}")
+def add_review(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
 
-#         # Vérifier si le produit est déjà dans le panier, sinon le créer
-#         cart_item, item_created = ShoppingCartItem.objects.get_or_create(cart=cart, product_item=product)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            new_review = form.save(commit=False)
+            new_review.product = product
+            new_review.user = request.user
+            new_review.save()
+            return redirect('detail', pk=product_id)  # Changez product_id à pk
+    else:
+        form = ReviewForm()
 
-#         # Si le produit est déjà dans le panier, augmenter la quantité
-#         if not item_created:
-#             cart_item.qty += 1
-#             cart_item.save()
-
-#         return redirect('cart')  # Rediriger vers la page du panier
-
-
-# def add_to_cart_view(request, pk):
-#     product = get_object_or_404(Product, pk=pk)
-
-#     # Check if the user is logged in
-#     if not request.user.is_authenticated:
-#         # Redirect to the login page or handle it accordingly
-#         messages.error(request, 'Please log in to add items to your cart.')
-#         return HttpResponse(status=401)
-
-#     # Get or create the user's shopping cart
-#     cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-
-#     # Add the product to the cart
-#     cart.products.add(product)
-#     cart.save()
-
-#     # Display a success message
-#     messages.success(request, f'{product.name} added to your cart successfully!')
-
-#     # You can redirect to a specific page or just return a response
-#     return HttpResponse(status=200)
-
-# def add_to_cart_view(request, pk):
-#     product = get_object_or_404(Product, pk=pk)
-
-#     # Check if the user is logged in
-#     if not request.user.is_authenticated:
-#         # Redirect to the login page or handle it accordingly
-#         messages.error(request, 'Please log in to add items to your cart.')
-#         return HttpResponse(status=401)
-
-#     # Get or create the user's shopping cart
-#     cart, _ = ShoppingCart.objects.get_or_create(user=request.user)
-
-#     # Add the product to the cart
-#     cart.products.add(product)
-#     cart.save()
-
-#     # Display a success message
-#     messages.success(request, f'{product.name} added to your cart successfully!')
-
-#     # You can redirect to a specific page or just return a response
-#     return HttpResponse(status=200)
+    return render(request, 'add_review.html', {'form': form, 'product': product})
 
 
 
-# def add_to_cart_view(request, pk):
-#     product_item = get_object_or_404(ProductItem, pk=pk)
 
-#     # Check if the user is logged in
-#     if not request.user.is_authenticated:
-#         # Redirect to the login page or handle it accordingly
-#         messages.error(request, 'Please log in to add items to your cart.')
-#         return HttpResponse(status=401)
 
-#     # Get or create the user's shopping cart
-#     cart, _ = ShoppingCart.objects.get_or_create(user=request.user)
 
-#     # Add the product to the cart
-#     cart_item, created = cart.shoppingcartitem_set.get_or_create(product_item=product_item)
-#     if not created:
-#         # If the item already exists in the cart, you may want to increment the quantity
-#         cart_item.qty += 1
-#         cart_item.save()
-
-#     # Display a success message
-#     messages.success(request, f'{product_item.name} added to your cart successfully!')
-
-#     # You can redirect to a specific page or just return a response
-#     return HttpResponse(status=200)
 
 
 
@@ -183,3 +133,5 @@ def category_product_list_view(request, cid):
         "products":products,
     }
     return render(request,"category.html", context)
+
+
