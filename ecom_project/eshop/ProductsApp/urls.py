@@ -11,7 +11,7 @@ urlpatterns = [
     path('shop/',views.shop ,name='shop'),
     path('category/<int:cid>/',category_product_list_view ,name='category'),
     # path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
-    # path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
+    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
     path('detail/<int:pk>/', ProductDetailView.as_view(), name='detail'),
     path('add_review/<int:product_id>/', views.add_review, name='add_review'),
   
