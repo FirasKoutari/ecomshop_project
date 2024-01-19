@@ -19,16 +19,7 @@ class Variation(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
 
-# class Product(models.Model):
-#     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=255)
-#     description = models.TextField()
-#     product_image = models.ImageField(upload_to='product_images/')
-#     price = models.DecimalField(max_digits=10, decimal_places=2)
-#     qty_in_stock = models.IntegerField()
-    
-#     def __str__(self):
-#         return self.name
+
     
 
     from django.db import models
@@ -43,9 +34,29 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
     
 
+class VariationOption(models.Model):
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
+    value = models.CharField(max_length=255)
+
+    
+class PromotionCategory(models.Model):
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+
+
+# class Product(models.Model):
+#     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=255)
+#     description = models.TextField()
+#     product_image = models.ImageField(upload_to='product_images/')
+#     price = models.DecimalField(max_digits=10, decimal_places=2)
+#     qty_in_stock = models.IntegerField()
+    
+#     def __str__(self):
+#         return self.name
+    
 # class Product(models.Model):
 # 	name = models.CharField(max_length=100)
 # 	description = models.TextField(null=True)
@@ -60,9 +71,7 @@ class Product(models.Model):
 
 
 
-class VariationOption(models.Model):
-    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
-    value = models.CharField(max_length=255)
+
 
 # class ProductItem(models.Model):
 #     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -75,6 +84,4 @@ class VariationOption(models.Model):
 #     product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
 #     variation_option = models.ForeignKey(VariationOption, on_delete=models.CASCADE)
 
-class PromotionCategory(models.Model):
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+
