@@ -85,33 +85,59 @@ def product_list(request):
 #     return {'total_quantity': total_quantity}
 
 
+# @login_required
+# def wishlist(request):
+#     wishlist_items = WishlistItem.objects.filter(user=request.user).order_by('-added_at')
+#     return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
 @login_required
 def wishlist(request):
     wishlist_items = WishlistItem.objects.filter(user=request.user).order_by('-added_at')
-    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+    # wishlist_count = wishlist_items.count()
+    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items })
+
+# @login_required
+# def add_to_wishlist(request, product_id):
+#     product = Product.objects.get(pk=product_id)
+
+#     # Check if the item is already in the wishlist
+#     existing_wishlist_item = WishlistItem.objects.filter(user=request.user, product=product)
+#     if existing_wishlist_item.exists():
+#         # Increase the quantity if it's already in the wishlist
+#         existing_wishlist_item.update(quantity=models.F('quantity') + 1)
+#     else:
+#         # Add the item to the wishlist
+#         WishlistItem.objects.create(
+#             user=request.user,
+#             product=product,
+#             quantity=1,
+#         )
+
+#     return redirect('wishlist')
 
 @login_required
 def add_to_wishlist(request, product_id):
-    product = Product.objects.get(pk=product_id)
+    product = get_object_or_404(Product, pk=product_id)
 
-    # Check if the item is already in the wishlist
-    existing_wishlist_item = WishlistItem.objects.filter(user=request.user, product=product)
-    if existing_wishlist_item.exists():
-        # Increase the quantity if it's already in the wishlist
-        existing_wishlist_item.update(quantity=models.F('quantity') + 1)
+    # Check if the product is already in the wishlist
+    if WishlistItem.objects.filter(user=request.user, product=product).exists():
+        messages.warning(request, 'Product is already in your wishlist.')
     else:
-        # Add the item to the wishlist
+        # Add the product to the wishlist
         WishlistItem.objects.create(
             user=request.user,
             product=product,
             quantity=1,
         )
+        messages.success(request, 'Product added to your wishlist.')
 
-    return redirect('wishlist')
+    return redirect('shop')  # Redirect to the shop page or any other desired page
+
+
 
 @login_required
 def remove_from_wishlist(request, wishlist_item_id):
-    wishlist_item = WishlistItem.objects.get(pk=wishlist_item_id)
+    wishlist_item = get_object_or_404(WishlistItem, pk=wishlist_item_id)
     wishlist_item.delete()
-    return redirect('wishlist')
 
+    return redirect('CartApp:wishlist')
