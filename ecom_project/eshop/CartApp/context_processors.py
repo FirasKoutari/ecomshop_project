@@ -10,3 +10,10 @@ def cart_total_quantity(request):
         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
 
     return {'total_quantity': total_quantity}
+
+from .models import WishlistItem
+
+def wishlist_count(request):
+    if request.user.is_authenticated:
+        return {'wishlist_count': WishlistItem.objects.filter(user=request.user).count()}
+    return {'wishlist_count': 0}

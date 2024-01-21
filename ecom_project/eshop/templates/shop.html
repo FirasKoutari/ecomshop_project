@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<link href="{% static 'css/style2.css'%}" rel="stylesheet">
+
 {% block content %}
 
 
@@ -230,13 +232,18 @@
                                 <!-- Affichez les détails du produit -->
                             
                                 <!-- Utilisez le lien avec l'ID du produit actuel -->
-                                           <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart </a>
+                                 <a href="{% url 'CartApp:add_to_wishlist' product_id=pr.id %}" class="btn btn-primary px-3">
+                                    <i class="fa fa-heart mr-1"></i> Add To Wishlist
+                                </a> 
+                                <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart </a>
                                 {% comment %} <a href="{% url 'CartApp:add_to_cart' product_id=1 %}" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
+                                {% comment %} <a href="{% url 'CartApp:add_to_wishlist' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fas fa-heart text-primary"></i> Add To wishlist </a> {% endcomment %}
 
                                 {% comment %} <a href="{% url 'cart:add_to_cart' product.id %}"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
                                 
-
-
+                               
+                               
+                              
 
 
                                   
@@ -296,6 +303,73 @@
             });
         }
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    {% comment %} <script>
+        $(document).ready(function () {
+            $('#favorite').on('change', function () {
+                var productId = $(this).data('product-id');
+                var isChecked = $(this).prop('checked');
+    
+                // Send an Ajax request to the Django server to handle adding/removing from the wishliste
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "CartApp:add_to_wishlist" %}',
+                    data: {
+                        'product_id': productId,
+                        'is_checked': isChecked ? 'true' : 'false',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        // Update the UI or perform other necessary actions
+                        if (isChecked) {
+                            // The product has been added to the wishlist
+                            console.log('Product added to the wishlist.');
+                        } else {
+                            // The product has been removed from the wishlist
+                            console.log('Product removed from the wishlist.');
+                        }
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // Handle Ajax errors if needed
+                        console.log('Error in Ajax request.');
+                    }
+                });
+            });
+        });
+    </script> {% endcomment %}
+    
+    {% comment %} <script>
+        $(document).ready(function () {
+            // Gestion du clic sur le bouton "Add to Wishlist"
+            $('.add-to-wishlist').on('click', function (e) {
+                e.preventDefault();
+                var productId = $(this).data('product-id');
+    
+                // Utilisez AJAX pour ajouter le produit à la liste de souhaits
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "CartApp:add_to_wishlist" %}',
+                    data: {
+                        'product_id': productId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        // Affichez le message de succès ou effectuez d'autres actions nécessaires
+                        console.log(data.message);
+    
+                        // Redirigez vers la page Wishlist
+                        window.location.href = '{% url "CartApp:wishlist" %}';
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // Gérez les erreurs AJAX si nécessaire
+                        console.log('Error in Ajax request.');
+                    }
+                });
+            });
+        });
+    </script> {% endcomment %}
+    
 
 
 </body>
