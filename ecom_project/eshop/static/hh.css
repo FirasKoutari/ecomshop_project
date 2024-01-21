@@ -1,0 +1,15 @@
+/* Ici style commentaire */
+
+.review {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  font-weight: bold;
+}
+
+.comment {
+  margin-top: 5px;
+}

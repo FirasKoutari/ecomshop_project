@@ -24,7 +24,7 @@ def cart(request):
 # eshop/views.py
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from CartApp.models import CartItem
+from CartApp.models import CartItem , WishlistItem
 
 
 def view_cart(request):
@@ -83,4 +83,35 @@ def product_list(request):
 # def cart_total_quantity(request):
 #     total_quantity = CartItem.objects.filter(user=request.user).aggregate(Sum('quantity'))['quantity__sum'] or 0
 #     return {'total_quantity': total_quantity}
+
+
+@login_required
+def wishlist(request):
+    wishlist_items = WishlistItem.objects.filter(user=request.user).order_by('-added_at')
+    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
+@login_required
+def add_to_wishlist(request, product_id):
+    product = Product.objects.get(pk=product_id)
+
+    # Check if the item is already in the wishlist
+    existing_wishlist_item = WishlistItem.objects.filter(user=request.user, product=product)
+    if existing_wishlist_item.exists():
+        # Increase the quantity if it's already in the wishlist
+        existing_wishlist_item.update(quantity=models.F('quantity') + 1)
+    else:
+        # Add the item to the wishlist
+        WishlistItem.objects.create(
+            user=request.user,
+            product=product,
+            quantity=1,
+        )
+
+    return redirect('wishlist')
+
+@login_required
+def remove_from_wishlist(request, wishlist_item_id):
+    wishlist_item = WishlistItem.objects.get(pk=wishlist_item_id)
+    wishlist_item.delete()
+    return redirect('wishlist')
 
