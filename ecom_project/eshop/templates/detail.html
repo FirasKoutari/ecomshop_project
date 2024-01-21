@@ -150,13 +150,11 @@
                     </div>
                     {% comment %} <button href="{% url 'add_to_cart_view' pk=pr.id %}" class="btn btn-primary px-3"><i  class="fa fa-shopping-cart mr-1"></i> Add To Cart</button> {% endcomment %}
 
-                    {% for pr in products %}
     <!-- Affichez les détails du produit -->
-               <p>{{ pr.name }} - ${{ pr.price }}</p>
 
     <!-- Utilisez le lien avec l'ID du produit actuel -->
-               <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
-                   {% endfor %}
+               <a href="{% url 'CartApp:add_to_cart' product_id=product.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
+               {% comment %} <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart </a> {% endcomment %}
 
                     
                     {% comment %} <a href="{% url 'CartApp:add_to_cart' product_id=1 %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a> {% endcomment %}
