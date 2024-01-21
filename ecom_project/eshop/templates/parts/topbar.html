@@ -58,7 +58,12 @@
                 <span class="badge">{{ wishlist_count }}</span>
             </a>
             
-            <a href="/" class="btn border">
+            {% comment %} <a href="/" class="btn border">
+                <span class="badge">0</span>
+                
+            </a> {% endcomment %}
+            
+            <a href="{% url 'CartApp:view_cart' %}" class="btn border">
                 <i class="fas fa-shopping-cart text-primary"></i>
                 <span class="badge">{{ total_quantity }}</span>
             </a>

@@ -281,6 +281,47 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+    {% comment %} <script>
+        $(document).ready(function () {
+            // Gestion du clic sur le bouton "Moins"
+            $('.btn-minus').on('click', function () {
+                updateQuantity($(this), -1);
+            });
+    
+            // Gestion du clic sur le bouton "Plus"
+            $('.btn-plus').on('click', function () {
+                updateQuantity($(this), 1);
+            });
+    
+            // Fonction pour mettre à jour la quantité via AJAX
+            function updateQuantity(button, change) {
+                var productId = button.closest('.input-group').find('input').data('product-id');
+                var quantityInput = button.closest('.input-group').find('input');
+                var currentQuantity = parseInt(quantityInput.val());
+    
+                // Utilisez AJAX pour mettre à jour la quantité dans le panier
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "CartApp:update_cart_quantity" %}',
+                    data: {
+                        'product_id': productId,
+                        'change': change,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        // Mettez à jour la valeur de l'input avec la nouvelle quantité
+                        quantityInput.val(currentQuantity + change);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // Gérez les erreurs AJAX si nécessaire
+                        console.log('Error in Ajax request.');
+                    }
+                });
+            }
+        });
+    </script> {% endcomment %}
+    
+
 
 </body>
 

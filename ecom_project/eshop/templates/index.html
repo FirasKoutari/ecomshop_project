@@ -1,4 +1,7 @@
+{% extends 'base.html' %}
 {% load static %}
+
+{% block content %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +33,7 @@
 
 <body>
     <!-- Topbar Start -->
-    <div class="container-fluid">
+    {% comment %} <div class="container-fluid">
         <div class="row bg-secondary py-2 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center">
@@ -90,11 +93,11 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
     <!-- Topbar End -->
 
 
-    <!-- Navbar Start -->
+    {% comment %} <!-- Navbar Start -->
     <div class="container-fluid mb-5">
         <div class="row border-top px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
@@ -136,17 +139,9 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
                             <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
-                            <a href="{% url "detail" %}" class="nav-item nav-link">Shop Detail</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    {% comment %} <a href="{% url "cart" %} " class="dropdown-item">Shopping Cart</a> {% endcomment %}
-                                    <a href="{% url 'CartApp:view_cart' %}" class="dropdown-item">Shopping Cart</a>
-
-                                    <a href="{% url "checkout" %} " class="dropdown-item">Checkout</a>
-                                </div>
-                            </div>
-                            <a href="contact " class="nav-item nav-link">Contact</a>
+                            <a href="{% url 'CartApp:view_cart' %}" class="nav-item nav-link">Shopping Cart</a>
+                            <a href="{% url "checkout" %} " class="nav-item nav-link">Checkout</a>
+                                <a href="contact " class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             {% if user.is_authenticated %}
@@ -195,7 +190,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
     <!-- Navbar End -->
 
 
@@ -344,7 +339,7 @@
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <a href="{% url 'product_detail' pr.id %}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -384,7 +379,7 @@
         </div>
 
 
-        <div class="row px-xl-5 pb-3">
+        {% comment %} <div class="row px-xl-5 pb-3">
             {% for pr in prod %}
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
                 <div class="card product-item border-0 mb-4">
@@ -404,7 +399,7 @@
                 </div>
             </div>
             {% endfor%}
-        </div>
+        </div> {% endcomment %}
     </div>
     <!-- Products End -->
 
@@ -445,6 +440,7 @@
     <!-- Vendor End -->
 
 
+    {% comment %} 
     <!-- Footer Start -->
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
@@ -465,7 +461,7 @@
                             <a class="text-dark mb-2" href="{% url "index" %}"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-dark mb-2" href="{% url "shop" %}"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
                             <a class="text-dark mb-2" href="{% url "detail" %}"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            {% comment %} <a class="text-dark mb-2" href="{% url "cart" %}"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a> {% endcomment %}
+                            {% comment %} <a class="text-dark mb-2" href="{% url "cart" %}"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a> 
                             <a class="text-dark mb-2" href="{% url 'CartApp:view_cart' %}"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
 
 
@@ -514,8 +510,8 @@
                 <img class="img-fluid" src="img/payments.png" alt="">
             </div>
         </div>
-    </div>
-    <!-- Footer End -->
+    </div>{% endcomment %}
+    <!-- Footer End --> 
 
 
     <!-- Back to Top -->
@@ -537,3 +533,5 @@
 </body>
 
 </html>
+
+{% endblock content%}

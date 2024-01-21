@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<link href="{% static 'css/style2.css'%}" rel="stylesheet">
+
 {% block content %}
 
 
@@ -38,95 +40,6 @@
         border-radius: 5px;
         text-align: center;
     }
-
-@import url('https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700&display=swap');
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-bodyo {
-    font-family: "Exo", sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fbfbfb;
-    height: 100vh;
-}
-
-svgo {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-svgo patho {
-    fill: #f11658;
-    transition: transform 200ms ease-in-out, opacity 200ms ease;
-}
-
-buttono {
-    transform-style: preserve-3d;
-    transform: translateZ(0);
-    padding: 12px;
-    border-radius: 3px;
-    border: none;
-    background-color: transparent;
-    position: relative;
-    overflow: hidden;
-    transition: background-color 200ms ease, padding-right 200ms ease-out box-shadow 200ms ease;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-    cursor: pointer;
-}
-
-buttono:hover {
-    background-color: #f3f3f3;
-    padding-right: 32px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-buttono svgo patho {
-    transform: translateX(-56px);
-}
-
-buttono:hovero svgo patho {
-    transform: translateX(0px);
-}
-
-buttono .labelo {
-    transition: transform 200ms ease-out;
-}
-
-buttono:hover .labelo {
-    transform: translateX(20px);
-}
-
-buttono .icono {
-    transition: color 200ms ease;
-    position: relative;
-}
-
-buttono:hover .icono {
-    color: #fff;
-}
-.icono{
-    float:left;
-    text-align: center;
-    width:24px;
-    line-height:24px;
-    margin-right:12px;
-    color:#9b9b9b;
-}
-.labelo{
-    float:left;
-    line-height: 24px;
-    font-weight:700;
-    margin-right:12px;
-    color:#4a4a4a;
-    letter-spacing: 0.8px;
-}
-
 </style>
 
     <!-- Shop Start -->
@@ -319,14 +232,18 @@ buttono:hover .icono {
                                 <!-- Affichez les détails du produit -->
                             
                                 <!-- Utilisez le lien avec l'ID du produit actuel -->
-                                           <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart </a>
+                                 <a href="{% url 'CartApp:add_to_wishlist' product_id=pr.id %}" class="btn btn-primary px-3">
+                                    <i class="fa fa-heart mr-1"></i> Add To Wishlist
+                                </a> 
+                                <a href="{% url 'CartApp:add_to_cart' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart </a>
                                 {% comment %} <a href="{% url 'CartApp:add_to_cart' product_id=1 %}" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
-                                <a href="{% url 'CartApp:add_to_wishlist' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fas fa-heart text-primary"></i> Add To wishlist </a>
+                                {% comment %} <a href="{% url 'CartApp:add_to_wishlist' product_id=pr.id %}" class="btn btn-primary px-3"><i class="fas fa-heart text-primary"></i> Add To wishlist </a> {% endcomment %}
 
                                 {% comment %} <a href="{% url 'cart:add_to_cart' product.id %}"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a> {% endcomment %}
                                 
-
-
+                               
+                               
+                              
 
 
                                   
@@ -386,6 +303,73 @@ buttono:hover .icono {
             });
         }
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    {% comment %} <script>
+        $(document).ready(function () {
+            $('#favorite').on('change', function () {
+                var productId = $(this).data('product-id');
+                var isChecked = $(this).prop('checked');
+    
+                // Send an Ajax request to the Django server to handle adding/removing from the wishliste
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "CartApp:add_to_wishlist" %}',
+                    data: {
+                        'product_id': productId,
+                        'is_checked': isChecked ? 'true' : 'false',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        // Update the UI or perform other necessary actions
+                        if (isChecked) {
+                            // The product has been added to the wishlist
+                            console.log('Product added to the wishlist.');
+                        } else {
+                            // The product has been removed from the wishlist
+                            console.log('Product removed from the wishlist.');
+                        }
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // Handle Ajax errors if needed
+                        console.log('Error in Ajax request.');
+                    }
+                });
+            });
+        });
+    </script> {% endcomment %}
+    
+    {% comment %} <script>
+        $(document).ready(function () {
+            // Gestion du clic sur le bouton "Add to Wishlist"
+            $('.add-to-wishlist').on('click', function (e) {
+                e.preventDefault();
+                var productId = $(this).data('product-id');
+    
+                // Utilisez AJAX pour ajouter le produit à la liste de souhaits
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "CartApp:add_to_wishlist" %}',
+                    data: {
+                        'product_id': productId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        // Affichez le message de succès ou effectuez d'autres actions nécessaires
+                        console.log(data.message);
+    
+                        // Redirigez vers la page Wishlist
+                        window.location.href = '{% url "CartApp:wishlist" %}';
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // Gérez les erreurs AJAX si nécessaire
+                        console.log('Error in Ajax request.');
+                    }
+                });
+            });
+        });
+    </script> {% endcomment %}
+    
 
 
 </body>

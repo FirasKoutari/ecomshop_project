@@ -11,12 +11,43 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import JsonResponse
 
 
+from .models import Wishlist
+from django.http import JsonResponse
+
 
 # Create your views here.
 def cart(request):
     return render(request,'cart.html')
 # eshop/views.py
 
+# def wishlist(request):
+#     return render(request,'wishlist.html')
+
+
+def wishlist(request):
+    user = request.user  # Assurez-vous que l'utilisateur est connecté
+    wishlist_items = Wishlist.objects.filter(user=user)
+
+    context = {
+        'wishlist_items': wishlist_items,
+    }
+    return render(request, 'wishlist.html', context)
+
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+
+@require_POST
+@csrf_exempt
+def add_to_wishlist(request):
+    product_id = request.POST.get('product_id')
+    is_checked = request.POST.get('is_checked') == 'true'
+
+    # Logique pour ajouter ou retirer le produit de la liste de souhaits ici
+    # Assurez-vous de gérer correctement l'authentification et la persistance des données
+
+    # Exemple de réponse JSON
+    response_data = {'message': 'Produit ajouté à la liste de souhaits.' if is_checked else 'Produit retiré de la liste de souhaits.'}
+    return JsonResponse(response_data)
 
 # def add_to_cart(request, product_item_id):
 #     product_item = get_object_or_404(ProductItem, pk=product_item_id)
@@ -166,4 +197,5 @@ def add_to_cart_from_wishlist(request, wishlist_item_id):
         messages.success(request, f"{wishlist_item.product.name} added to the cart.")
 
     return JsonResponse({'status': 'success'})
+
 

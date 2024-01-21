@@ -73,6 +73,17 @@ class CartItem(models.Model):
     def __str__(self):
         return f'{self.quantity} x {self.product.name}'
 
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    @classmethod
+    def add_to_wishlist(cls, user, product, quantity=1):
+        wishlist_item, created = cls.objects.get_or_create(user=user, product=product)
+        if not created:
+            wishlist_item.quantity += quantity
+            wishlist_item.save()
 
 class WishlistItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
