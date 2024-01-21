@@ -1,43 +1,57 @@
 from django.db import models
-from django.contrib.auth.models import User
-from CartApp.models import CartItem
+from AuthenticationApp.models import User
 # from ProductsApp.models import ProductItem
 
 # Create your models here.
 
-class Order(models.Model):
+class PaymentType(models.Model):
+    value = models.CharField(max_length=255)
+
+class UserPaymentMethod(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    billing_first_name = models.CharField(max_length=255)
-    billing_last_name = models.CharField(max_length=255)
-    billing_email = models.EmailField()
-    billing_mobile_no = models.CharField(max_length=15)
-    billing_address_line1 = models.CharField(max_length=255)
-    billing_address_line2 = models.CharField(max_length=255, blank=True, null=True)
-    billing_country = models.CharField(max_length=255)
-    billing_city = models.CharField(max_length=255)
-    billing_state = models.CharField(max_length=255)
-    billing_zip_code = models.CharField(max_length=10)
-    shipping_first_name = models.CharField(max_length=255)
-    shipping_last_name = models.CharField(max_length=255)
-    shipping_email = models.EmailField()
-    shipping_mobile_no = models.CharField(max_length=15)
-    shipping_address_line1 = models.CharField(max_length=255)
-    shipping_address_line2 = models.CharField(max_length=255, blank=True, null=True)
-    shipping_country = models.CharField(max_length=255)
-    shipping_city = models.CharField(max_length=255)
-    shipping_state = models.CharField(max_length=255)
-    shipping_zip_code = models.CharField(max_length=10)
-    payment_method = models.CharField(max_length=50)
-    
-    order_date = models.DateTimeField(auto_now_add=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.CASCADE)
+    provider = models.CharField(max_length=255)
+    account_number = models.CharField(max_length=255)
+    expiry_date = models.DateField()
+    is_default = models.BooleanField()
 
-    def __str__(self):
-        return f"Order #{self.pk} - {self.user.username}"
+class Country(models.Model):
+    country_name = models.CharField(max_length=255)
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    cart_item = models.ForeignKey(CartItem, on_delete=models.CASCADE)
+class Address(models.Model):
+    unit_number = models.CharField(max_length=255)
+    street_number = models.CharField(max_length=255)
+    address_line1 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255)
+    region = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=20)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"{self.cart_item.quantity} x {self.cart_item.product.name} - ${self.cart_item.total_price}"
+class ShippingMethod(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+class OrderStatus(models.Model):
+    status = models.CharField(max_length=255)
+
+class ShopOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_date = models.DateTimeField()
+    payment_method = models.ForeignKey(UserPaymentMethod, on_delete=models.CASCADE)
+    shipping_address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    shipping_method = models.ForeignKey(ShippingMethod, on_delete=models.CASCADE)
+    order_total = models.DecimalField(max_digits=10, decimal_places=2)
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
+
+# class OrderLine(models.Model):
+#     product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
+#     order = models.ForeignKey(ShopOrder, on_delete=models.CASCADE)
+#     qty = models.IntegerField()
+#     price = models.DecimalField(max_digits=10, decimal_places=2)
+
+class UserAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    is_default = models.BooleanField()
+
