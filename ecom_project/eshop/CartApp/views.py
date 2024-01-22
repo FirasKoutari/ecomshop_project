@@ -63,18 +63,26 @@ from django.contrib.auth.decorators import login_required
 from CartApp.models import CartItem , WishlistItem
 
 
-# def view_cart(request):
-#     cart_items = CartItem.objects.filter(user=request.user)
-#     total_price = sum(item.product.price * item.quantity for item in cart_items)
-#     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
  
 
+
+# def view_cart(request):
+#     cart_items = CartItem.objects.filter(user=request.user).annotate(
+#         total_price_item=Sum(F('quantity') * F('product__price'), output_field=DecimalField())
+#     )
+#     total_price = cart_items.aggregate(Sum('total_price_item'))['total_price_item__sum']
+
+#     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user).annotate(
         total_price_item=Sum(F('quantity') * F('product__price'), output_field=DecimalField())
     )
     total_price = cart_items.aggregate(Sum('total_price_item'))['total_price_item__sum']
+
+    # Si total_price est None, affectez-lui la valeur 0
+    total_price = total_price or 0
 
     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
