@@ -153,10 +153,28 @@
                 </div>
             </div>
         </div>
+        <!-- cart.html -->
+{% comment %} {% if messages %}
+<div class="alert alert-warning">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+{% endif %} {% endcomment %}
+
+<!-- Reste du contenu de votre modèle -->
+
     </div>
     <!-- Cart End -->
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    {% if messages %}
+  <div class="alert alert-warning">
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+  </div>
+{% endif %}
 
 {% endblock content %}

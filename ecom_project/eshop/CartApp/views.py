@@ -67,13 +67,7 @@ from CartApp.models import CartItem , WishlistItem
  
 
 
-# def view_cart(request):
-#     cart_items = CartItem.objects.filter(user=request.user).annotate(
-#         total_price_item=Sum(F('quantity') * F('product__price'), output_field=DecimalField())
-#     )
-#     total_price = cart_items.aggregate(Sum('total_price_item'))['total_price_item__sum']
 
-#     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user).annotate(
@@ -85,6 +79,57 @@ def view_cart(request):
     total_price = total_price or 0
 
     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+# from django.contrib import messages
+
+# def view_cart(request):
+#     cart_items = CartItem.objects.filter(user=request.user).annotate(
+#         total_price_item=Sum(F('quantity') * F('product__price'), output_field=DecimalField())
+#     )
+#     total_price = cart_items.aggregate(Sum('total_price_item'))['total_price_item__sum']
+
+#     # Si total_price est None, affectez-lui la valeur 0
+#     total_price = total_price or 0
+
+#     if not cart_items:
+#         messages.warning(request, "The cart is empty. Add items to your cart before checking out.")
+#         return redirect('shop')  # Redirige vers la page du panier
+
+#     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+def checkout(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+
+    if not cart_items:
+        messages.warning(request, "Cannot proceed to checkout. The cart is empty.")
+        return redirect('cart')
+
+    # Le reste de votre logique de paiement va ici...
+
+    return render(request, 'checkout.html', {'cart_items': cart_items})
+
+
+
+# # views.py
+# from django.contrib import messages
+
+
+
+# from django.shortcuts import render
+# from django.contrib import messages
+
+# def view_cart(request):
+#     cart_items = CartItem.objects.filter(user=request.user)
+#     total_price = sum(item.product.price * item.quantity for item in cart_items)
+    
+#     if not cart_items:
+#         messages.warning(request, "The cart is empty.")
+#         return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+    
+#     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
+
 
 
 def add_to_cart(request, product_id):
