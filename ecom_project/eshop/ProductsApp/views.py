@@ -1,3 +1,8 @@
+import operator
+from AuthenticationApp import models
+from django.db.models import Q
+from functools import reduce
+from operator import or_
 from ProductsApp.models import Product,ProductCategory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -6,7 +11,8 @@ from CartApp.models import ShoppingCart
 from django.http import HttpResponse
 from django.contrib import messages
 from CartApp.models import ShoppingCart
-
+from .models import Product
+from .forms import ReviewForm
 
 
 # Create your views here.
@@ -63,9 +69,8 @@ class ProductDetailView(View):
 # ProductsApp/views.py
 # views.py
 # views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
-from .forms import ReviewForm
+
+
 
 def add_review(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -82,13 +87,6 @@ def add_review(request, product_id):
         form = ReviewForm()
 
     return render(request, 'add_review.html', {'form': form, 'product': product})
-
-
-
-
-
-
-
 
 
 def add_to_cart_view(request, pk):
@@ -124,14 +122,38 @@ def add_to_cart_view(request, pk):
     return HttpResponse(status=200)
 
 
+
+
 def category_product_list_view(request, cid):
     category = get_object_or_404(ProductCategory, id=cid)
-    products= Product.objects.filter(category=category)
+    products = Product.objects.filter(category=category)
+
+    # Filter by price
+    price_filter = request.GET.getlist('price-all')
+    if price_filter:
+        # If "All Price" is selected, no need to filter by price
+        pass
+    else:
+        price_ranges = ['price-1', 'price-2', 'price-3', 'price-4', 'price-5']
+        selected_ranges = [range_key for range_key in price_ranges if request.GET.get(range_key)]
+        if selected_ranges:
+            # Filter products based on selected price ranges
+            price_filters = {
+                'price-1': (0, 100),
+                'price-2': (100, 200),
+                'price-3': (200, 300),
+                'price-4': (300, 400),
+                'price-5': (400, 500),
+            }
+            price_query = reduce(operator.or_, [Q(price__range=price_filters[key]) for key in selected_ranges])
+            products = products.filter(price_query)
+
 
     context = {
-        "category":category,
-        "products":products,
+        "category": category,
+        "products": products,
     }
-    return render(request,"category.html", context)
+    return render(request, "category.html", context)
+
 
 

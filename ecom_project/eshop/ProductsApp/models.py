@@ -73,6 +73,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     qty = models.IntegerField()
     image = models.ImageField(upload_to='products/')
+    color = models.CharField(max_length=50, null=True)
+    size = models.CharField(max_length=10, null=True)
     # reviews = models.ManyToManyField(Review, related_name='products')
 
     def __str__(self):

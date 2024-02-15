@@ -1,8 +1,12 @@
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Order, OrderItem
-from CartApp.models import ShoppingCart, CartItem
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from CartApp.models import ShoppingCart,CartItem
+from .models import Order, OrderItem
+
+
 
 @login_required
 def checkout(request):
@@ -71,6 +75,7 @@ def checkout(request):
         order.save()
         # Clear the user's shopping cart
         cart_items.delete()
+        
         messages.success(request, 'Order placed successfully!')
         return redirect('order_success')  
     
@@ -81,6 +86,8 @@ def checkout(request):
     shipping_cost = 10  # You can calculate shipping cost based on your logic
     total_price += shipping_cost
     return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price, 'subtotal': subtotal, 'shipping_cost': shipping_cost})
+
+
 
 def order_success(request):
     return render(request, 'order_success.html')

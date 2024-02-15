@@ -48,34 +48,34 @@
                 <!-- Price Start -->
                 <div class="border-bottom mb-4 pb-4">
                     <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
-                    <form>
+                    <form method="get" action="" id="filter-form">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
+                            <input type="checkbox" class="custom-control-input"  id="price-all" name="price-all" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="price-all">All Price</label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
+                            <input type="checkbox" class="custom-control-input" id="price-1" name="price-1" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="price-1">$0 - $100</label>
                             <span class="badge border font-weight-normal">150</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
+                            <input type="checkbox" class="custom-control-input" id="price-2" name="price-2" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="price-2">$100 - $200</label>
                             <span class="badge border font-weight-normal">295</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
+                            <input type="checkbox" class="custom-control-input" id="price-3" name="price-3" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="price-3">$200 - $300</label>
                             <span class="badge border font-weight-normal">246</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
+                            <input type="checkbox" class="custom-control-input" id="price-4" name="price-4" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="price-4">$300 - $400</label>
                             <span class="badge border font-weight-normal">145</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
+                            <input type="checkbox" class="custom-control-input" id="price-5" name="price-5" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="price-5">$400 - $500</label>
                             <span class="badge border font-weight-normal">168</span>
                         </div>
@@ -86,34 +86,34 @@
                 <!-- Color Start -->
                 <div class="border-bottom mb-4 pb-4">
                     <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
-                    <form>
+                    <form method="get" action="" id="filter-form">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
+                            <input type="checkbox" class="custom-control-input" checked id="color-all" name="color-all" onchange="submitFilterForm()">
+                            <label class="custom-control-label" for="color-all">All Color</label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
+                            <input type="checkbox" class="custom-control-input" id="color-1" name="color-1" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="color-1">Black</label>
                             <span class="badge border font-weight-normal">150</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
+                            <input type="checkbox" class="custom-control-input" id="color-2" name="color-2" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="color-2">White</label>
                             <span class="badge border font-weight-normal">295</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
+                            <input type="checkbox" class="custom-control-input" id="color-3" name="color-3" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="color-3">Red</label>
                             <span class="badge border font-weight-normal">246</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
+                            <input type="checkbox" class="custom-control-input" id="color-4" name="color-4" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="color-4">Blue</label>
                             <span class="badge border font-weight-normal">145</span>
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
+                            <input type="checkbox" class="custom-control-input" id="color-5" name="color-5" onchange="submitFilterForm()">
                             <label class="custom-control-label" for="color-5">Green</label>
                             <span class="badge border font-weight-normal">168</span>
                         </div>
@@ -124,7 +124,7 @@
                 <!-- Size Start -->
                 <div class="mb-5">
                     <h5 class="font-weight-semi-bold mb-4">Filter by size</h5>
-                    <form>
+                    <form method="get" action="" id="filter-form">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="size-all">
                             <label class="custom-control-label" for="size-all">All Size</label>
@@ -287,6 +287,12 @@
         </div>
     </div>
     <!-- Back to Top -->
+    <script>
+        // Function to dynamically submit the filter form when checkboxes change
+        function submitFilterForm() {
+            document.getElementById('filter-form').submit();
+        }
+    </script>
     <script>
         // Get the overlay and popup elements
         var overlay = document.getElementById('overlay');

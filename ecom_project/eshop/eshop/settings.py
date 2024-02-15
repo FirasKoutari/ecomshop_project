@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'CartApp',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -175,7 +175,6 @@ SESSION_COOKIE_HTTPONLY = True
 
 # STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
-
 
 
 
