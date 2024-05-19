@@ -157,3 +157,84 @@ def category_product_list_view(request, cid):
 
 
 
+
+
+
+def index(request):
+    prod = Product.objects.all()
+    return render(request, 'index.html', {'prod': prod})
+
+def contact(request):
+    return render(request, 'contact.html')
+
+
+def shop1(request):
+    query = request.GET.get('q')
+    if query:
+        print(f"Query: {query}")  # Debugging line
+        products = Product.objects.filter(name__icontains=query)
+    else:
+        products = Product.objects.all()
+    print(f"Products: {products}")  # Debugging line
+    return render(request, 'shop1.html', {'prod': products})
+
+
+
+def products_view(request):
+    query = request.GET.get('q')
+    if query:
+        products = Product.objects.filter(name__icontains=query)
+    else:
+        products = Product.objects.all()
+    
+    # Ajoutez une impression pour le débogage
+    print(f"Query: {query}, Products: {products}")
+    
+    return render(request, 'shop_products.html', {'products': products})
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import Product  # Update path if using a different app
+
+
+
+
+from .forms import PriceRangeForm
+
+def shop_filter(request):
+    products = Product.objects.all()  # Initial queryset
+
+    # Handle price filtering based on request parameters:
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+
+    if min_price and max_price:
+        try:
+            min_price = float(min_price)
+            max_price = float(max_price)
+            products = products.filter(price__gte=min_price, price__lte=max_price)
+        except ValueError:
+            pass  # Handle invalid price values gracefully (optional)
+
+    # Handle sorting based on request parameters (optional):
+    sort_by = request.GET.get('sort_by')
+    if sort_by:
+        if sort_by == 'price_asc':
+            products = products.order_by('price')
+        elif sort_by == 'price_desc':
+            products = products.order_by('-price')
+
+    # Create an instance of the PriceRangeForm
+    form = PriceRangeForm(initial={'min_price': min_price, 'max_price': max_price})
+
+    context = {
+        'products': products,
+        'form': form,
+        # Add other context variables as needed
+    }
+
+    return render(request, 'shop_filter.html', context)
+
+
