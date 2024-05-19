@@ -39,20 +39,40 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <div class="navbar-nav mr-auto py-0">
+                    <!-- <div class="navbar-nav mr-auto py-0">
                         <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
                         <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
                         <a href="{% url 'CartApp:view_cart' %}" class="nav-item nav-link">Shopping Cart</a>
                         <a href="{% url "checkout" %} " class="nav-item nav-link">Checkout</a>
                         <a href="contact " class="nav-item nav-link">Contact</a>
+                    </div> -->
+
+                    
+                    <div class="navbar-nav ml-auto py-0">
+                        {% if user.is_authenticated %}
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
+                            <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
+                            <a href="{% url 'CartApp:view_cart' %}" class="nav-item nav-link">Shopping Cart</a>
+                            <a href="{% url "checkout" %} " class="nav-item nav-link">Checkout</a>
+                            <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
+                        </div>
+                       {%else%}
+                       
+                       <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
+                       <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
+                       <a href="contact " class="nav-item nav-link">Contact</a>
+                       {% endif %}
+
                     </div>
 
 
                     <div class="navbar-nav ml-auto py-0">
                         {% if user.is_authenticated %}
                         
-                        <li class="nav-item nav-link"> Bonjour , {{user.username}}!!</li>  <a href="AuthenticationApp/logout" class="nav-item nav-link">Logout</a>
+                        <li class="nav-item nav-link"> Bonjour , {{user.username}}!!</li>  <a href="{% url "logout"%}" class="nav-item nav-link">Logout</a>
                        {%else%}
+                       
                             <a href="{% url "login"%}" class="nav-item nav-link">Login / Register</a>
                        {% endif %}
 
