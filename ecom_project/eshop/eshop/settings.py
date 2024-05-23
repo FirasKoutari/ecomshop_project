@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-ycvq**d_r(euen&f)16+ql=q4mi3(ffjn4@kb2rtjq$n*x_a!8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+
+
 
 # app_name = 'cart'
 # Application definition
