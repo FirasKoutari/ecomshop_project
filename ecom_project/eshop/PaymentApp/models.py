@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from CartApp.models import CartItem
 # from ProductsApp.models import ProductItem
 
@@ -41,3 +42,15 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.cart_item.quantity} x {self.cart_item.product.name} - ${self.cart_item.total_price}"
+    
+
+class CreditCard(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    card_name = models.CharField(max_length=255)
+    card_number = models.CharField(max_length=19)
+    exp_month = models.CharField(max_length=2)
+    exp_year = models.CharField(max_length=4)
+    cvv = models.CharField(max_length=4)
+
+    def __str__(self):
+        return f"{self.card_name} - {self.card_number[-4:]}"

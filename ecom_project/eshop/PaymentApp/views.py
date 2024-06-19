@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from CartApp.models import ShoppingCart,CartItem
-from .models import Order, OrderItem
+from .models import Order, OrderItem ,CreditCard
 
 
 
@@ -76,8 +76,8 @@ def checkout(request):
         # Clear the user's shopping cart
         cart_items.delete()
         
-        messages.success(request, 'Order placed successfully!')
-        return redirect('order_success')  
+        
+        return redirect('add_card')  
     
     # If the request method is not POST, retrieve cart items and calculate prices
     cart_items = CartItem.objects.filter(user=request.user)
@@ -90,4 +90,28 @@ def checkout(request):
 
 
 def order_success(request):
-    return render(request, 'order_success.html')
+    return render(request, 'card.html')
+
+@login_required
+def add_card(request):
+    if request.method == 'POST':
+        card_name = request.POST.get('card_name')
+        card_number = request.POST.get('card_number')
+        exp_month = request.POST.get('exp_month')
+        exp_year = request.POST.get('exp_year')
+        cvv = request.POST.get('cvv')
+
+        # Create and save the credit card information
+        CreditCard.objects.create(
+            user=request.user,
+            card_name=card_name,
+            card_number=card_number,
+            exp_month=exp_month,
+            exp_year=exp_year,
+            cvv=cvv
+        )
+
+        messages.success(request, 'Card added successfully!')
+        return redirect('checkout')
+
+    return render(request, 'add_card.html')
