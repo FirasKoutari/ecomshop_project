@@ -99,15 +99,32 @@ class Product(models.Model):
 
 
 
-# class ProductItem(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     sku = models.CharField(max_length=255)
-#     qty_in_stock = models.IntegerField()
-#     product_image = models.ImageField(upload_to='product_images/')
-#     price = models.DecimalField(max_digits=10, decimal_places=2)
+class ProductItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    sku = models.CharField(max_length=255)
+    qty_in_stock = models.IntegerField()
+    product_image = models.ImageField(upload_to='product_images/')
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
 # class ProductConfiguration(models.Model):
 #     product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
 #     variation_option = models.ForeignKey(VariationOption, on_delete=models.CASCADE)
+
+
+
+class Orders(models.Model):
+    STATUS =(
+        ('Pending','Pending'),
+        ('Order Confirmed','Order Confirmed'),
+        ('Out for Delivery','Out for Delivery'),
+        ('Delivered','Delivered'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product=models.ForeignKey('Product',on_delete=models.CASCADE,null=True)
+    email = models.CharField(max_length=50,null=True)
+    address = models.CharField(max_length=500,null=True)
+    mobile = models.CharField(max_length=20,null=True)
+    order_date= models.DateField(auto_now_add=True,null=True)
+    status=models.CharField(max_length=50,null=True,choices=STATUS)
 
 

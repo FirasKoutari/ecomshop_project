@@ -7,6 +7,7 @@ from ProductsApp.models import Product,ProductCategory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .models import Product ,Review
+from ProductsApp.models import ProductItem
 from CartApp.models import ShoppingCart
 from django.http import HttpResponse
 from django.contrib import messages
@@ -236,5 +237,117 @@ def shop_filter(request):
     }
 
     return render(request, 'shop_filter.html', context)
+
+from .models import Orders
+from . import forms 
+
+def my_order_view(request):
+    user = request.user
+    orders = Orders.objects.filter(user=user)
+    ordered_products = [order.product for order in orders]
+
+    return render(request, 'my_order.html', {'data': zip(ordered_products, orders)})
+
+
+
+# def update_order_view(request, pk):
+#     order = Orders.objects.get(id=pk)
+#     orderForm = forms.OrderForm(instance=order)
+#     if request.method == 'POST':
+#         orderForm = forms.OrderForm(request.POST, instance=order)
+#         if orderForm.is_valid():
+#             orderForm.save()
+#             return redirect('admin-view-booking')
+#     return render(request, 'update_order.html', {'orderForm': orderForm})
+
+
+def delete_order_view(request, pk):
+    order = Orders.objects.get(id=pk)
+    order.delete()
+    return redirect('admin-view-booking')
+
+
+def admin_view_booking_view(request):
+    orders = Orders.objects.all()
+    ordered_products = [order.product for order in orders]
+    ordered_bys = [order.user for order in orders]
+
+    return render(request, 'admin_view_booking.html', {'data': zip(ordered_products, ordered_bys, orders)})
+
+
+import io
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = io.BytesIO()
+    pdf = pisa.pisaDocument(io.BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return
+
+
+def download_invoice_view(request,orderID,productID):
+    order=models.Orders.objects.get(id=orderID)
+    product=models.Product.objects.get(id=productID)
+    mydict={
+        'orderDate':order.order_date,
+        'customerName':request.user,
+        'customerEmail':order.email,
+        'customerMobile':order.mobile,
+        'shipmentAddress':order.address,
+        'orderStatus':order.status,
+
+        'productName':product.name,
+        'productImage':product.product_image,
+        'productPrice':product.price,
+        'productDescription':product.description,
+
+
+    }
+    return render_to_pdf('download_invoice.html',mydict)
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Orders
+
+@login_required
+def my_order_view(request):
+    user = request.user
+    orders = Orders.objects.filter(user=user)
+    ordered_products = [order.product for order in orders]
+    return render(request, 'my_order.html', {'data': zip(ordered_products, orders)})
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import OrderForm
+from .models import Orders
+
+
+
+def update_order_view(request, pk):
+    order = get_object_or_404(Orders, id=pk)
+    orderForm = OrderForm(instance=order)
+    
+    if request.method == 'POST':
+        orderForm = OrderForm(request.POST, instance=order)
+        if orderForm.is_valid():
+            orderForm.save()
+            print("Order status updated successfully!")  # Debug statement
+            return redirect('admin-view-booking')
+        else:
+            print("Form is not valid")  # Debug statement
+            print(orderForm.errors)  # Print form errors for debugging
+    
+    return render(request, 'update_order.html', {'orderForm': orderForm})
+
+
+
 
 

@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'CartApp',
+    'widget_tweaks',
+
 
 ]
 
@@ -133,11 +135,14 @@ USE_I18N = True
 
 USE_TZ = True
 
+import sys
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
+# sys.path.insert(0, os.path.join(BASE_DIR, 'Django', 'Github', 'ecomshop_project', 'ecom_project', 'eshop'))
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'media')

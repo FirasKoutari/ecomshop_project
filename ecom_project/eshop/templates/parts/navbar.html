@@ -13,7 +13,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link" data-toggle="dropdown">Dresses <i class="fa fa-angle-down float-right mt-1"></i></a>
                         <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                            <a href="{% url "category" cid=1%}" class="dropdown-item">Men's Dresses</a>
+                            <a href="{% url "category" cid=1 %}" class="dropdown-item">Men's Dresses</a>
                             <a href="{% url "category" cid=11 %}" class="dropdown-item">Women's Dresses</a>
                             <a href="{% url "category" cid=12 %}" class="dropdown-item">Baby's Dresses</a>
                         </div>
@@ -26,7 +26,7 @@
                     <a href="{% url "category" cid=7 %}" class="nav-item nav-link">Jumpsuits</a>
                     <a href="{% url "category" cid=8 %}" class="nav-item nav-link">Blazers</a>
                     <a href="{% url "category" cid=9 %}" class="nav-item nav-link">Jackets</a>
-                    <a href="{% url "category" cid=10%}" class="nav-item nav-link">Shoes</a>
+                    <a href="{% url "category" cid=10 %}" class="nav-item nav-link">Shoes</a>
                 </div>
             </nav>
         </div>
@@ -39,47 +39,35 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <!-- <div class="navbar-nav mr-auto py-0">
-                        <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
-                        <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
-                        <a href="{% url 'CartApp:view_cart' %}" class="nav-item nav-link">Shopping Cart</a>
-                        <a href="{% url "checkout" %} " class="nav-item nav-link">Checkout</a>
-                        <a href="contact " class="nav-item nav-link">Contact</a>
-                    </div> -->
-
-                    
-                    <div class="navbar-nav ml-auto py-0">
+                    <div class="navbar-nav mr-auto py-0">
                         {% if user.is_authenticated %}
-                        <div class="navbar-nav mr-auto py-0">
                             <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
                             <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
                             <a href="{% url 'CartApp:view_cart' %}" class="nav-item nav-link">Shopping Cart</a>
-                            <a href="{% url "checkout" %} " class="nav-item nav-link">Checkout</a>
+                            <a href="{% url "checkout" %}" class="nav-item nav-link">Checkout</a>
                             <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
-                        </div>
-                       {%else%}
-                       
-                       <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
-                       <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
-                       <a href="contact " class="nav-item nav-link">Contact</a>
-                       {% endif %}
+                            <a href="{% url 'my_order_view' %}" class="nav-item nav-link">My Orders</a>
 
+                            {% if user.is_staff %}
+                                <a href="{% url 'admin-view-booking' %}" class="nav-item nav-link">Admin Booking View</a>
+
+
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url "index" %}" class="nav-item nav-link active">Home</a>
+                            <a href="{% url "shop" %}" class="nav-item nav-link">Shop</a>
+                            <a href="contact" class="nav-item nav-link">Contact</a>
+                        {% endif %}
                     </div>
-
 
                     <div class="navbar-nav ml-auto py-0">
                         {% if user.is_authenticated %}
-                        
-                        <li class="nav-item nav-link"> Bonjour , {{user.username}}!!</li>  <a href="{% url "logout"%}" class="nav-item nav-link">Logout</a>
-                       {%else%}
-                       
-                            <a href="{% url "login"%}" class="nav-item nav-link">Login / Register</a>
-                       {% endif %}
-
+                            <li class="nav-item nav-link">Bonjour, {{ user.username }}!!</li>
+                            <a href="{% url "logout" %}" class="nav-item nav-link">Logout</a>
+                        {% else %}
+                            <a href="{% url "login" %}" class="nav-item nav-link">Login / Register</a>
+                        {% endif %}
                     </div>
-
-
-
                 </div>
             </nav>  
         </div>
