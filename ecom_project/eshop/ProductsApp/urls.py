@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ProductDetailView,add_to_cart_view
+from .views import ProductDetailView
 # In your urls.py file
 from .views import category_product_list_view
     
@@ -23,11 +23,9 @@ urlpatterns = [
     path('admin-view-booking/', views.admin_view_booking_view, name='admin-view-booking'),
     path('my-orders/', views.my_order_view, name='my_order_view'),
     path('download-invoice/<int:orderID>/<int:productID>', views.download_invoice_view,name='download-invoice'),
+    # path('download-invoice/<int:orderID>/<int:productID>/', views.download_invoice_view, name='download-invoice'),
 
-
-
-
-  
+    
 
 
     

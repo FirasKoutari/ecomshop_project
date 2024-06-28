@@ -8,14 +8,12 @@
     @page {
       size: A4;
       margin: 1cm;
+    }
 
-       footer {
-        -pdf-frame-content: footerContent;
-        bottom: 0cm;
-        margin-left: 9cm;
-        margin-right: 9cm;
-        height: 1cm;
-      }
+    body {
+      font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      color: #555;
     }
 
     .invoice-box {
@@ -24,10 +22,6 @@
       padding: 30px;
       border: 1px solid #eee;
       box-shadow: 0 0 10px rgba(0, 0, 0, .15);
-      font-size: 16px;
-      line-height: 24px;
-      font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-      color: #555;
     }
 
     .invoice-box table {
@@ -83,17 +77,18 @@
     }
 
     @media only screen and (max-width: 600px) {
-      .invoice-box table tr.top table td {
-        width: 100%;
-        display: block;
-        text-align: center;
-      }
-
+      .invoice-box table tr.top table td,
       .invoice-box table tr.information table td {
         width: 100%;
         display: block;
         text-align: center;
       }
+    }
+
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     /** RTL **/
@@ -113,23 +108,17 @@
 </head>
 
 <body>
-
-  <br><br><br>
   <div class="invoice-box">
     <table cellpadding="0" cellspacing="0">
       <tr class="top">
         <td colspan="2">
-          <table class="table table-bordered table-striped">
+          <table>
             <tr>
               <td class="title">
                 <h5>Ecommerce Site - Django</h5>
               </td>
-
               <td>
-
-
-                Order Date: {{orderDate}}<br>
-
+                Order Date: {{ orderDate|default_if_none:"N/A" }}<br>
               </td>
             </tr>
           </table>
@@ -141,22 +130,18 @@
           <table>
             <tr>
               <td>
-                Customer : <br>{{customerName}}<br><br>
-                Customer Email :<br> {{customerEmail}}
-
+                Customer : <br>{{ customerName|default_if_none:"N/A" }}<br><br>
+                Customer Email :<br> {{ customerEmail|default_if_none:"N/A" }}
               </td>
-
               <td>
                 Contact Number :<br>
-                {{customerMobile}}<br><br>
-                  Shipment Address :<br> {{shipmentAddress}}
-
+                {{ customerMobile|default_if_none:"N/A" }}<br><br>
+                Shipment Address :<br> {{ shipmentAddress|default_if_none:"N/A" }}
               </td>
             </tr>
           </table>
         </td>
       </tr>
-
 
       <tr class="information">
         <td colspan="2">
@@ -164,21 +149,18 @@
             <tr>
               <td>
                 Product Image :<br>
-                 <img src="{% static product_image.url %}" alt="Profile Pic" height="40px" width="40px" /><br><br>
+                <img src="{{ productImage|default_if_none:"" }}" alt="Product Image" height="400px" width="400px" class="center" /><br><br>
                 Product Price : <br>
-                ${{productPrice}}
+                ${{ productPrice|default_if_none:"0.00" }}
               </td>
               <td>
-                Product: <br> {{productName}}<br><br>
-                Description: <br> {{productDescription}}
+                Product: <br> {{ productName|default_if_none:"N/A" }}<br><br>
+                Description:         <br>          {{                 productDescription      |default_if_none:"N/A" }}
               </td>
-
             </tr>
           </table>
         </td>
       </tr>
-
-
 
       <tr class="information">
         <td colspan="2">
@@ -186,22 +168,13 @@
             <tr>
               <td>
                 Order Status :<br><br>
-                  {{orderStatus}}
+                {{ orderStatus|default_if_none:"N/A" }}
               </td>
             </tr>
           </table>
         </td>
       </tr>
-
-
-      
-
-
     </table>
   </div>
 </body>
-<!--
-developed By : sumit kumar
--->
-
 </html>

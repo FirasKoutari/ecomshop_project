@@ -282,40 +282,97 @@ from django.template import Context
 from django.http import HttpResponse
 
 
+# def render_to_pdf(template_src, context_dict):
+#     template = get_template(template_src)
+#     html  = template.render(context_dict)
+#     result = io.BytesIO()
+#     pdf = pisa.pisaDocument(io.BytesIO(html.encode("ISO-8859-1")), result)
+#     if not pdf.err:
+#         return HttpResponse(result.getvalue(), content_type='application/pdf')
+#     return
+
+
+# def download_invoice_view(request,orderID,productID):
+#     order=models.Orders.objects.get(id=orderID)
+#     product=models.Product.objects.get(id=productID)
+#     mydict={
+#         'orderDate':order.order_date,
+#         'customerName':request.user,
+#         'customerEmail':order.email,
+#         'customerMobile':order.mobile,
+#         'shipmentAddress':order.address,
+#         'orderStatus':order.status,
+
+#         'productName':product.name,
+#         'productImage':product.product_image,
+#         'productPrice':product.price,
+#         'productDescription':product.description,
+
+
+#     }
+#     return render_to_pdf('download_invoice.html',mydict)
+
+
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from django.conf import settings
+import os
+
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
-    html  = template.render(context_dict)
+    html = template.render(context_dict)
     result = io.BytesIO()
     pdf = pisa.pisaDocument(io.BytesIO(html.encode("ISO-8859-1")), result)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return
+    return HttpResponse('Error generating PDF', content_type='text/plain')
 
+def download_invoice_view(request, orderID, productID):
+    order = Orders.objects.get(id=orderID)
+    product = Product.objects.get(id=productID)
 
-def download_invoice_view(request,orderID,productID):
-    order=models.Orders.objects.get(id=orderID)
-    product=models.Product.objects.get(id=productID)
-    mydict={
-        'orderDate':order.order_date,
-        'customerName':request.user,
-        'customerEmail':order.email,
-        'customerMobile':order.mobile,
-        'shipmentAddress':order.address,
-        'orderStatus':order.status,
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_{orderID}_{productID}.pdf"'
 
-        'productName':product.name,
-        'productImage':product.product_image,
-        'productPrice':product.price,
-        'productDescription':product.description,
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
 
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
 
-    }
-    return render_to_pdf('download_invoice.html',mydict)
+    # Title
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, height - 100, "Ecommerce Site - Django")
 
+    # Order Information
+    p.setFont("Helvetica", 12)
+    p.drawString(100, height - 150, f"Order Date: {order.order_date}")
+    p.drawString(100, height - 170, f"Customer: {request.user}")
+    p.drawString(100, height - 190, f"Customer Email: {order.email}")
+    p.drawString(100, height - 210, f"Customer Mobile: {order.mobile}")
+    p.drawString(100, height - 230, f"Shipment Address: {order.address}")
+    p.drawString(100, height - 250, f"Order Status: {order.status}")
+
+    # Product Information
+    p.drawString(100, height - 290, f"Product Name: {product.name}")
+    p.drawString(100, height - 310, f"Product Description: {product.description}")
+    p.drawString(100, height - 330, f"Product Price: ${product.price}")
+
+    # If there is an image, include it
+    if product.image:
+        image_path = os.path.join(settings.MEDIA_ROOT, product.image.name)
+        p.drawImage(image_path, 100, height - 400, width=100, height=100)
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+
+    return response
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Orders
+# from .models import Orders
 
 @login_required
 def my_order_view(request):
@@ -327,7 +384,7 @@ def my_order_view(request):
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import OrderForm
-from .models import Orders
+# from .models import Orders
 
 
 
